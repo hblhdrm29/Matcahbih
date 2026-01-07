@@ -1,36 +1,72 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🍵 Matchabih - Premium Japanese Matcha E-Commerce
 
-## Getting Started
+Matchabih adalah platform e-commerce premium yang dikhususkan untuk produk Matcha Jepang berkualitas tinggi. Dibangun dengan estetika "Zen" yang modern, platform ini memberikan pengalaman belanja yang tenang, mewah, dan responsif.
 
-First, run the development server:
+## ✨ Fitur Utama
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+*   **🎨 Desain Modern & Premium**: Menggunakan palet warna kurasi "Warm Cream" (latar belakang) dan "Deep Espresso" (aksen/teks) untuk menciptakan kesan eksklusif dan tenang.
+*   **🌓 Dark Mode Support**: Dukungan tema gelap yang dioptimalkan untuk kenyamanan mata tanpa mengurangi estetika premium.
+*   **✨ Animasi Interaktif**: Menggunakan **Framer Motion** untuk transisi halaman yang halus, efek hover yang elegan, dan elemen UI yang terasa hidup.
+*   **📱 Responsif**: Tata letak yang dioptimalkan sepenuhnya untuk berbagai perangkat, mulai dari desktop layar lebar hingga smartphone.
+*   **🛍️ Pengalaman Belanja Lengkap**:
+    *   Katalog produk dengan filter dan pencarian.
+    *   Sistem keranjang belanja (Cart) yang instan.
+    *   Halaman Checkout multi-step yang intuitif.
+*   **🔐 Autentikasi Modern**: Integrasi **NextAuth.js** untuk login yang aman melalui Google OAuth atau email/password.
+*   **👤 Portal Pelanggan**: Halaman profil untuk mengelola data akun, pesanan, dan wishlist.
+*   **🇮🇩 Konten Lokal**: Seluruh antarmuka dan konten disajikan dalam Bahasa Indonesia yang profesional.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠️ Teknologi yang Digunakan
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Core Stack
+*   **Next.js (App Router)**: Framework React untuk performa maksimal, SEO-friendly, dan routing modern.
+*   **TypeScript**: Menjamin keamanan data dan kemudahan pengembangan kode.
+*   **Prisma ORM**: Manajemen database yang handal untuk PostgreSQL.
+*   **PostgreSQL**: Database relasional untuk menyimpan data produk, pengguna, dan pesanan.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Styling & UI
+*   **Tailwind CSS**: Framework CSS utility-first untuk integrasi desain yang sangat presisi.
+*   **Framer Motion**: Library animasi untuk menciptakan pengalaman pengguna yang *fluid*.
+*   **Lucide React**: Koleksi icon yang konsisten, bersih, dan modern.
+*   **Next/Image**: Optimasi gambar otomatis untuk waktu pemuatan yang sangat cepat.
 
-## Learn More
+### Auth & State
+*   **NextAuth.js**: Solusi autentikasi lengkap dan aman (Support Google OAuth).
+*   **Zustand**: State management yang ringan untuk menangani logika keranjang belanja (Cart).
+*   **Bcrypt.js**: Enkripsi password untuk keamanan tingkat lanjut.
 
-To learn more about Next.js, take a look at the following resources:
+## 🚀 Cara Menjalankan Project
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1.  **Clone Repository**
+    ```bash
+    git clone https://github.com/your-username/matchabih.git
+    cd matchabih
+    ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+2.  **Install Dependensi**
+    ```bash
+    npm install
+    ```
 
-## Deploy on Vercel
+3.  **Setup Environment Variables**
+    Buat file `.env` di root folder dan isi sesuai dengan `.env.example`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+4.  **Jalankan Database (Docker)**
+    ```bash
+    docker-compose up -d
+    ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+5.  **Migrasi Database & Seeding**
+    ```bash
+    npx prisma migrate dev
+    npx prisma db seed
+    ```
+
+6.  **Jalankan Mode Pengembangan**
+    ```bash
+    npm run dev
+    ```
+
+---
+
+Matchabih - *Bringing the heart of Uji, Japan to your cup.* 🍃
