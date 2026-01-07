@@ -7,28 +7,28 @@ const categories = [
         name: "Ceremonial Grade",
         slug: "ceremonial",
         description: "Highest quality for traditional tea ceremony",
-        image: "/images/categories/ceremonial.jpg",
+        image: "/images/products/027043400_1556174133-_X_-Manfaat-Sehat-dari-Matcha-By-Aedka-Studio-Shutterstock.jpg",
         color: "from-emerald-500/80 to-emerald-700/80",
     },
     {
         name: "Premium Grade",
         slug: "premium",
         description: "Premium quality for daily enjoyment",
-        image: "/images/categories/premium.jpg",
+        image: "/images/products/matcha-2356768_1280.jpg",
         color: "from-green-500/80 to-green-700/80",
     },
     {
         name: "Culinary Grade",
         slug: "culinary",
         description: "Perfect for baking and cooking",
-        image: "/images/categories/culinary.jpg",
+        image: "/images/products/pngtree-iced-matcha-green-tea-latte-in-glass-image_15656615.jpg",
         color: "from-lime-500/80 to-lime-700/80",
     },
     {
         name: "Matcha Latte",
         slug: "latte",
         description: "Specially blended for lattes",
-        image: "/images/categories/latte.jpg",
+        image: "/images/products/matcha-latte-recipe-thumbnail-16_9.jpg",
         color: "from-teal-500/80 to-teal-700/80",
     },
 ];
@@ -61,10 +61,13 @@ export default function CategoryGrid() {
                             style={{ animationDelay: `${index * 0.1}s` }}
                         >
                             {/* Background Image */}
-                            <div className="absolute inset-0 bg-gradient-to-br from-matcha/30 to-forest/50">
-                                {/* Placeholder gradient - replace with actual images */}
-                                <div
-                                    className={`absolute inset-0 bg-gradient-to-br ${category.color}`}
+                            <div className="absolute inset-0">
+                                <Image
+                                    src={category.image}
+                                    alt={category.name}
+                                    fill
+                                    className="object-cover transition-transform duration-500 group-hover:scale-110"
+                                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                                 />
                             </div>
 

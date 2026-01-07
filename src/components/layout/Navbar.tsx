@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
 import {
     Menu,
     X,
@@ -11,6 +12,7 @@ import {
     User,
     Leaf,
 } from "lucide-react";
+import { useCartStore } from "@/store/cartStore";
 
 const navLinks = [
     { label: "Home", href: "/" },
@@ -22,10 +24,16 @@ const navLinks = [
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
+    const [mounted, setMounted] = useState(false);
     const pathname = usePathname();
 
-    // Mock cart count - will be replaced with Zustand store
-    const cartCount = 3;
+    const { getTotalItems, openCart } = useCartStore();
+    const { data: session, status } = useSession();
+    const cartCount = mounted ? getTotalItems() : 0;
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -39,8 +47,8 @@ export default function Navbar() {
     return (
         <header
             className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
-                    ? "glass-cream shadow-matcha py-3"
-                    : "bg-transparent py-5"
+                ? "glass-cream shadow-matcha py-3"
+                : "bg-transparent py-5"
                 }`}
         >
             <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -91,8 +99,8 @@ export default function Navbar() {
                         </button>
 
                         {/* Cart Button */}
-                        <Link
-                            href="/cart"
+                        <button
+                            onClick={openCart}
                             className="relative p-2 rounded-full hover:bg-cream-dark transition-colors duration-300 group"
                             aria-label="Shopping Cart"
                         >
@@ -102,16 +110,26 @@ export default function Navbar() {
                                     {cartCount > 99 ? "99+" : cartCount}
                                 </span>
                             )}
-                        </Link>
+                        </button>
 
                         {/* User Button */}
-                        <Link
-                            href="/login"
-                            className="hidden sm:flex p-2 rounded-full hover:bg-cream-dark transition-colors duration-300 group"
-                            aria-label="Account"
-                        >
-                            <User className="w-5 h-5 text-forest group-hover:text-matcha transition-colors" />
-                        </Link>
+                        {mounted && status === "authenticated" && session?.user ? (
+                            <Link
+                                href="/profile"
+                                className="hidden sm:flex w-9 h-9 bg-primary text-primary-foreground rounded-full items-center justify-center font-bold text-sm hover:bg-primary/90 transition-colors"
+                                aria-label="Profile"
+                            >
+                                {session.user.name?.charAt(0).toUpperCase() || "U"}
+                            </Link>
+                        ) : (
+                            <Link
+                                href="/auth/signin"
+                                className="hidden sm:flex p-2 rounded-full hover:bg-cream-dark transition-colors duration-300 group"
+                                aria-label="Sign In"
+                            >
+                                <User className="w-5 h-5 text-forest group-hover:text-matcha transition-colors" />
+                            </Link>
+                        )}
 
                         {/* Mobile Menu Toggle */}
                         <button
@@ -140,8 +158,8 @@ export default function Navbar() {
                                 href={link.href}
                                 onClick={() => setIsOpen(false)}
                                 className={`px-4 py-3 rounded-lg text-sm font-medium transition-all duration-300 ${pathname === link.href
-                                        ? "bg-matcha text-white"
-                                        : "text-forest hover:bg-cream-dark hover:text-matcha"
+                                    ? "bg-matcha text-white"
+                                    : "text-forest hover:bg-cream-dark hover:text-matcha"
                                     }`}
                             >
                                 {link.label}

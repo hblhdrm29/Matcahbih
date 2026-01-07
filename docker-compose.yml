@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: matchabih-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: matchabih
+      POSTGRES_PASSWORD: matchabih123
+      POSTGRES_DB: matchabih
+    ports:
+      - "5432:5432"
+    volumes:
+      - matchabih_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U matchabih -d matchabih"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  matchabih_postgres_data:

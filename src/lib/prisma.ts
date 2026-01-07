@@ -1,43 +1,29 @@
-// Prisma Client - will be initialized after running `npx prisma generate`
-// Make sure to set DATABASE_URL in .env first
+import { Pool } from "pg";
+import { PrismaPg } from "@prisma/adapter-pg";
+import { PrismaClient } from "@prisma/client";
 
-let prisma: any;
+const globalForPrisma = globalThis as unknown as {
+    prisma: PrismaClient | undefined;
+};
 
-try {
-    const { PrismaClient } = require("@prisma/client");
+function createPrismaClient() {
+    const connectionString = process.env.DATABASE_URL;
 
-    const globalForPrisma = globalThis as unknown as {
-        prisma: typeof PrismaClient | undefined;
-    };
+    if (!connectionString) {
+        throw new Error("DATABASE_URL environment variable is not set");
+    }
 
-    prisma =
-        globalForPrisma.prisma ??
-        new PrismaClient({
-            log:
-                process.env.NODE_ENV === "development"
-                    ? ["query", "error", "warn"]
-                    : ["error"],
-        });
+    const pool = new Pool({ connectionString });
+    const adapter = new PrismaPg(pool);
 
-    if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
-} catch (error) {
-    // Prisma client not generated yet - create mock
-    console.warn("⚠️ Prisma client not generated. Run: npx prisma generate");
-    prisma = {
-        product: {
-            findMany: async () => [],
-            count: async () => 0,
-            create: async () => ({}),
-        },
-        category: {
-            findMany: async () => [],
-        },
-        user: {
-            findUnique: async () => null,
-        },
-        // Add other models as needed
-    };
+    return new PrismaClient({
+        adapter,
+        log: process.env.NODE_ENV === "development" ? ["error", "warn"] : ["error"],
+    });
 }
 
-export { prisma };
+export const prisma = globalForPrisma.prisma ?? createPrismaClient();
+
+if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+
 export default prisma;

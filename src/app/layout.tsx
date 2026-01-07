@@ -3,6 +3,8 @@ import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import CartDrawer from "@/components/cart/CartDrawer";
+import AuthProvider from "@/components/providers/AuthProvider";
 
 const inter = Inter({
   variable: "--font-sans-custom",
@@ -74,10 +76,14 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${playfair.variable} font-sans antialiased`}
       >
-        <Navbar />
-        <main className="min-h-screen">{children}</main>
-        <Footer />
+        <AuthProvider>
+          <Navbar />
+          <main className="min-h-screen">{children}</main>
+          <Footer />
+          <CartDrawer />
+        </AuthProvider>
       </body>
     </html>
   );
 }
+
