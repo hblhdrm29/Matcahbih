@@ -48,6 +48,9 @@ export default function Navbar() {
     }, []);
 
     const isHome = pathname === "/";
+    const isAuthPage = pathname.startsWith("/auth");
+
+    if (isAuthPage) return null;
 
     const isActive = (path: string) => {
         if (path === "/") return pathname === "/";

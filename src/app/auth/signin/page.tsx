@@ -8,9 +8,9 @@ import { signIn, useSession } from "next-auth/react";
 import { Eye, EyeOff, Mail, Lock, Loader2 } from "lucide-react";
 
 const bgImages = [
-    "/images/aboutme/11054-kebun-teh-uji.jpg",
-    "/images/aboutme/matchakebun.jpg",
-    "/images/aboutme/pngtree-a-photo-of-the-large-green-tea-fields-image_10207725.jpg",
+    "/images/hd-signin-bg.png",
+    "/images/hd-matcha-powder.png",
+    "/images/hd-tea-room.png",
 ];
 
 export default function SignInPage() {
@@ -117,8 +117,8 @@ export default function SignInPage() {
                         key={index}
                         onClick={() => setCurrentBg(index)}
                         className={`w-2 h-2 rounded-full transition-all ${index === currentBg
-                                ? "bg-white w-6"
-                                : "bg-white/50 hover:bg-white/75"
+                            ? "bg-white w-6"
+                            : "bg-white/50 hover:bg-white/75"
                             }`}
                     />
                 ))}

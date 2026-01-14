@@ -36,11 +36,7 @@ export default function HeroSection() {
                 <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
                     {/* Content */}
                     <div className="order-2 lg:order-1 text-center lg:text-left">
-                        {/* Badge */}
-                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-matcha/10 rounded-full text-matcha text-sm font-medium mb-6 animate-fade-in">
-                            <Sparkles className="w-4 h-4" />
-                            New Arrival: Spring Harvest 2024
-                        </div>
+                        {/* Badge Removed */}
 
                         {/* Headline */}
                         <h1
@@ -83,21 +79,7 @@ export default function HeroSection() {
                             </Link>
                         </div>
 
-                        {/* Feature Badges */}
-                        <div
-                            className="flex flex-wrap items-center gap-6 justify-center lg:justify-start animate-slide-up"
-                            style={{ animationDelay: "0.4s" }}
-                        >
-                            {features.map((feature) => (
-                                <div
-                                    key={feature.label}
-                                    className="flex items-center gap-2 text-forest/60"
-                                >
-                                    <feature.icon className="w-5 h-5 text-matcha" />
-                                    <span className="text-sm font-medium">{feature.label}</span>
-                                </div>
-                            ))}
-                        </div>
+                        {/* Feature Badges Removed */}
                     </div>
 
                     {/* Image */}

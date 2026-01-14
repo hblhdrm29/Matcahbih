@@ -172,15 +172,9 @@ export default function FeaturedProducts() {
                 {/* Section Header */}
                 <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 mb-12">
                     <div>
-                        <span className="text-matcha text-sm font-medium uppercase tracking-wider">
-                            Curated for You
-                        </span>
                         <h2 className="text-3xl sm:text-4xl font-serif font-medium text-forest mt-2">
                             Featured Products
                         </h2>
-                        <p className="text-forest/60 mt-2 max-w-md">
-                            Handpicked selection of our finest matcha, sourced directly from Uji, Japan.
-                        </p>
                     </div>
                     <Link
                         href="/products"

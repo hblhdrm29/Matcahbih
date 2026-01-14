@@ -1,15 +1,31 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { Eye, EyeOff, Mail, Lock, User, Loader2, Check } from "lucide-react";
+
+const bgImages = [
+    "/images/hd-signin-bg.png",
+    "/images/hd-matcha-powder.png",
+    "/images/hd-tea-room.png",
+];
 
 export default function SignUpPage() {
     const router = useRouter();
     const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
+    const [currentBg, setCurrentBg] = useState(0);
+
+    // Auto-slide background
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentBg((prev) => (prev + 1) % bgImages.length);
+        }, 5000);
+        return () => clearInterval(interval);
+    }, []);
 
     const [formData, setFormData] = useState({
         name: "",
@@ -70,29 +86,59 @@ export default function SignUpPage() {
     const strength = passwordStrength();
 
     return (
-        <main className="min-h-screen relative flex items-center justify-center py-12 px-4">
-            {/* Matcha Gradient Background */}
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-primary/10 to-background" />
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/30 via-transparent to-transparent" />
+        <main className="min-h-screen relative flex items-center justify-center py-12 px-4 overflow-hidden">
+            {/* Background Image Slider */}
+            {bgImages.map((img, index) => (
+                <div
+                    key={img}
+                    className={`absolute inset-0 transition-opacity duration-1000 ${index === currentBg ? "opacity-100" : "opacity-0"
+                        }`}
+                >
+                    <Image
+                        src={img}
+                        alt="Background"
+                        fill
+                        className="object-cover"
+                        priority={index === 0}
+                    />
+                </div>
+            ))}
+
+            {/* Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-primary/30" />
+
+            {/* Slide Indicators */}
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+                {bgImages.map((_, index) => (
+                    <button
+                        key={index}
+                        onClick={() => setCurrentBg(index)}
+                        className={`w-2 h-2 rounded-full transition-all ${index === currentBg
+                            ? "bg-white w-6"
+                            : "bg-white/50 hover:bg-white/75"
+                            }`}
+                    />
+                ))}
+            </div>
 
             <div className="w-full max-w-md relative z-10">
                 {/* Logo */}
                 <div className="text-center mb-8">
                     <Link href="/" className="inline-block">
-                        <span className="text-3xl font-serif font-bold text-primary">
+                        <span className="text-3xl font-serif font-bold text-white drop-shadow-lg">
                             Matchabih
                         </span>
                     </Link>
-                    <h1 className="text-2xl font-serif font-medium text-foreground mt-6">
+                    <h1 className="text-2xl font-serif font-medium text-white mt-6 drop-shadow-lg">
                         Buat Akun Baru
                     </h1>
-                    <p className="text-muted-foreground mt-2">
+                    <p className="text-white/80 mt-2">
                         Daftar untuk mulai berbelanja produk matcha premium
                     </p>
                 </div>
 
                 {/* Form Card */}
-                <div className="bg-card rounded-2xl p-8 border border-border shadow-sm">
+                <div className="bg-card/95 backdrop-blur-sm rounded-2xl p-8 border border-border shadow-2xl">
                     <form onSubmit={handleSubmit} className="space-y-5">
                         {/* Error Message */}
                         {error && (
@@ -285,11 +331,11 @@ export default function SignUpPage() {
                 </div>
 
                 {/* Sign In Link */}
-                <p className="text-center mt-6 text-muted-foreground">
+                <p className="text-center mt-6 text-white/90">
                     Sudah punya akun?{" "}
                     <Link
                         href="/auth/signin"
-                        className="text-primary font-medium hover:underline"
+                        className="text-white font-medium hover:underline"
                     >
                         Masuk
                     </Link>
