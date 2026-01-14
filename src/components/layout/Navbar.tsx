@@ -21,8 +21,11 @@ const navLinks = [
     { label: "Contact", href: "/contact" },
 ];
 
+import SearchModal from "./SearchModal";
+
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
+    const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
     const [mounted, setMounted] = useState(false);
     const pathname = usePathname();
@@ -44,12 +47,16 @@ export default function Navbar() {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
+    const isHome = pathname === "/";
+
+    const isActive = (path: string) => {
+        if (path === "/") return pathname === "/";
+        return pathname.startsWith(path);
+    };
+
     return (
         <header
-            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
-                ? "glass-cream shadow-matcha py-3"
-                : "bg-transparent py-5"
-                }`}
+            className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 glass-cream shadow-matcha py-3"
         >
             <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between">
@@ -61,7 +68,7 @@ export default function Navbar() {
                         <div className="relative w-10 h-10 flex items-center justify-center rounded-full bg-matcha group-hover:bg-matcha-dark transition-colors duration-300">
                             <Leaf className="w-5 h-5 text-white" />
                         </div>
-                        <span className="text-xl md:text-2xl font-serif font-medium text-forest group-hover:text-matcha-dark transition-colors duration-300">
+                        <span className="text-xl md:text-2xl font-serif font-medium transition-colors duration-300 text-forest">
                             Matchabih
                         </span>
                     </Link>
@@ -73,14 +80,14 @@ export default function Navbar() {
                                 key={link.href}
                                 href={link.href}
                                 className={`relative text-sm font-medium transition-colors duration-300 
-                  ${pathname === link.href
+                  ${isActive(link.href)
                                         ? "text-matcha"
                                         : "text-forest hover:text-matcha"
                                     }
                   after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-0.5 
                   after:bg-matcha after:transition-all after:duration-300
                   hover:after:w-full
-                  ${pathname === link.href ? "after:w-full" : ""}
+                  ${isActive(link.href) ? "after:w-full" : ""}
                 `}
                             >
                                 {link.label}
@@ -92,10 +99,11 @@ export default function Navbar() {
                     <div className="flex items-center gap-3">
                         {/* Search Button */}
                         <button
+                            onClick={() => setIsSearchOpen(true)}
                             className="p-2 rounded-full hover:bg-cream-dark transition-colors duration-300 group"
                             aria-label="Search"
                         >
-                            <Search className="w-5 h-5 text-forest group-hover:text-matcha transition-colors" />
+                            <Search className="w-5 h-5 transition-colors text-forest group-hover:text-matcha" />
                         </button>
 
                         {/* Cart Button */}
@@ -104,7 +112,7 @@ export default function Navbar() {
                             className="relative p-2 rounded-full hover:bg-cream-dark transition-colors duration-300 group"
                             aria-label="Shopping Cart"
                         >
-                            <ShoppingBag className="w-5 h-5 text-forest group-hover:text-matcha transition-colors" />
+                            <ShoppingBag className="w-5 h-5 transition-colors text-forest group-hover:text-matcha" />
                             {cartCount > 0 && (
                                 <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] flex items-center justify-center text-[10px] font-bold text-white bg-matcha rounded-full px-1">
                                     {cartCount > 99 ? "99+" : cartCount}
@@ -116,7 +124,7 @@ export default function Navbar() {
                         {mounted && status === "authenticated" && session?.user ? (
                             <Link
                                 href="/profile"
-                                className="hidden sm:flex w-9 h-9 bg-primary text-primary-foreground rounded-full items-center justify-center font-bold text-sm hover:bg-primary/90 transition-colors"
+                                className="hidden sm:flex w-9 h-9 bg-matcha text-white rounded-full items-center justify-center font-bold text-sm hover:bg-matcha-dark transition-colors"
                                 aria-label="Profile"
                             >
                                 {session.user.name?.charAt(0).toUpperCase() || "U"}
@@ -127,7 +135,7 @@ export default function Navbar() {
                                 className="hidden sm:flex p-2 rounded-full hover:bg-cream-dark transition-colors duration-300 group"
                                 aria-label="Sign In"
                             >
-                                <User className="w-5 h-5 text-forest group-hover:text-matcha transition-colors" />
+                                <User className="w-5 h-5 transition-colors text-forest group-hover:text-matcha" />
                             </Link>
                         )}
 
@@ -157,7 +165,7 @@ export default function Navbar() {
                                 key={link.href}
                                 href={link.href}
                                 onClick={() => setIsOpen(false)}
-                                className={`px-4 py-3 rounded-lg text-sm font-medium transition-all duration-300 ${pathname === link.href
+                                className={`px-4 py-3 rounded-lg text-sm font-medium transition-all duration-300 ${isActive(link.href)
                                     ? "bg-matcha text-white"
                                     : "text-forest hover:bg-cream-dark hover:text-matcha"
                                     }`}
@@ -176,6 +184,9 @@ export default function Navbar() {
                     </div>
                 </div>
             </nav>
+
+            <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
         </header>
     );
 }
+

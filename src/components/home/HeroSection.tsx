@@ -124,53 +124,15 @@ export default function HeroSection() {
                                 <div className="absolute inset-0 bg-gradient-to-t from-forest/20 via-transparent to-transparent" />
                             </div>
 
-                            {/* Floating Card */}
-                            <div className="absolute -bottom-4 -left-4 sm:-bottom-6 sm:-left-6 glass-cream rounded-2xl p-4 sm:p-5 shadow-matcha animate-float">
-                                <div className="flex items-center gap-3">
-                                    <div className="w-12 h-12 rounded-full bg-matcha/20 flex items-center justify-center">
-                                        <Leaf className="w-6 h-6 text-matcha" />
-                                    </div>
-                                    <div>
-                                        <p className="text-xs text-forest/60">Starting from</p>
-                                        <p className="text-lg font-semibold text-forest">
-                                            Rp 150.000
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
+                            {/* Floating Card - Removed */}
 
-                            {/* Rating Badge */}
-                            <div
-                                className="absolute -top-4 -right-4 sm:-top-6 sm:-right-6 glass-cream rounded-2xl px-4 py-3 shadow-matcha animate-float"
-                                style={{ animationDelay: "1s" }}
-                            >
-                                <div className="flex items-center gap-2">
-                                    <div className="flex">
-                                        {[...Array(5)].map((_, i) => (
-                                            <svg
-                                                key={i}
-                                                className="w-4 h-4 text-yellow-500 fill-current"
-                                                viewBox="0 0 20 20"
-                                            >
-                                                <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
-                                            </svg>
-                                        ))}
-                                    </div>
-                                    <span className="text-sm font-medium text-forest">4.9</span>
-                                </div>
-                                <p className="text-xs text-forest/60 mt-1">1,200+ Reviews</p>
-                            </div>
+                            {/* Rating Badge - Removed */}
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* Scroll Indicator */}
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-                <div className="w-6 h-10 border-2 border-forest/30 rounded-full flex items-start justify-center p-1">
-                    <div className="w-1.5 h-2.5 bg-matcha rounded-full animate-pulse" />
-                </div>
-            </div>
+            {/* Scroll Indicator - Removed */}
         </section>
     );
 }

@@ -50,10 +50,7 @@ export default function AboutPage() {
 
                 <div className="container mx-auto px-4 relative z-10">
                     <div className="max-w-3xl mx-auto text-center">
-                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium mb-6">
-                            <Sparkles className="w-4 h-4" />
-                            Cerita Kami
-                        </div>
+
                         <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-medium text-foreground mb-6">
                             Menghadirkan{" "}
                             <span className="text-primary">Keajaiban Matcha</span>{" "}
@@ -84,10 +81,7 @@ export default function AboutPage() {
                                 />
                             </div>
                             {/* Decorative Badge */}
-                            <div className="absolute -bottom-6 -right-6 bg-primary text-primary-foreground p-6 rounded-2xl shadow-matcha-lg">
-                                <div className="text-3xl font-bold">5+</div>
-                                <div className="text-sm opacity-90">Tahun Pengalaman</div>
-                            </div>
+
                         </div>
 
                         {/* Content */}

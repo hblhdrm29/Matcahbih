@@ -138,21 +138,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
     const gradeStyle = gradeInfo[product.grade];
 
     return (
-        <main className="min-h-screen bg-background">
-            {/* Breadcrumb */}
-            <div className="container mx-auto px-4 py-4">
-                <nav className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Link href="/" className="hover:text-foreground transition-colors">
-                        Home
-                    </Link>
-                    <span>/</span>
-                    <Link href="/products" className="hover:text-foreground transition-colors">
-                        Products
-                    </Link>
-                    <span>/</span>
-                    <span className="text-foreground">{product.name}</span>
-                </nav>
-            </div>
+        <main className="min-h-screen bg-background pt-24">
 
             {/* Product Section */}
             <section className="container mx-auto px-4 py-8">

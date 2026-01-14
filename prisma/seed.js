@@ -1,11 +1,13 @@
 
-import { PrismaClient, MatchaGrade } from "@prisma/client";
-import "dotenv/config";
+const { PrismaClient } = require("@prisma/client");
+const fs = require('fs');
+require('dotenv').config();
 
 const prisma = new PrismaClient();
 
 async function main() {
-    console.log("🌱 Starting seed...");
+    console.log("🌱 Starting seed (JS)...");
+    console.log("DB URL Check:", process.env.DATABASE_URL ? "Exists" : "Missing");
 
     // 1. Clean up existing data
     try {
@@ -16,7 +18,8 @@ async function main() {
         await prisma.category.deleteMany();
         console.log("🧹 Cleared existing data");
     } catch (error) {
-        console.error("Error clearing data:", error);
+        console.error("Error clearing data log:", error.message);
+        fs.writeFileSync('seed_last_error.txt', error.message + '\n' + JSON.stringify(error, null, 2));
         process.exit(1);
     }
 
@@ -61,6 +64,13 @@ async function main() {
 
     // 3. Create Products
 
+    const Grade = {
+        CEREMONIAL: 'CEREMONIAL',
+        PREMIUM: 'PREMIUM',
+        CULINARY: 'CULINARY',
+        LATTE: 'LATTE'
+    };
+
     // Ceremonial Products
     await prisma.product.create({
         data: {
@@ -68,7 +78,7 @@ async function main() {
             slug: "uji-ceremonial-first-harvest",
             description: "Hand-picked, stone-ground first harvest matcha from Uji. Vibrant green color and umami-rich flavor.",
             price: 450000,
-            grade: MatchaGrade.CEREMONIAL,
+            grade: Grade.CEREMONIAL,
             flavor: "Umami, Sweet, Creamy",
             origin: "Uji, Kyoto, Japan",
             weight: 30,
@@ -85,7 +95,7 @@ async function main() {
             slug: "ceremonial-okumidori",
             description: "Single-cultivar Okumidori matcha. Distinctive rich aroma and smooth texture.",
             price: 520000,
-            grade: MatchaGrade.CEREMONIAL,
+            grade: Grade.CEREMONIAL,
             flavor: "Rich, Smooth, Nutty",
             origin: "Nishio, Japan",
             weight: 30,
@@ -103,7 +113,7 @@ async function main() {
             description: "Limited edition ceremonial matcha from a single estate in Uji.",
             price: 650000,
             comparePrice: 750000,
-            grade: MatchaGrade.CEREMONIAL,
+            grade: Grade.CEREMONIAL,
             flavor: "Rich, Full-bodied, Vegetal",
             origin: "Uji, Kyoto, Japan",
             weight: 20,
@@ -122,7 +132,7 @@ async function main() {
             slug: "daily-premium-matcha",
             description: "Perfect for your daily matcha ritual. Balanced flavor profile.",
             price: 280000,
-            grade: MatchaGrade.PREMIUM,
+            grade: Grade.PREMIUM,
             flavor: "Balanced, Light Astringency",
             origin: "Shizuoka, Japan",
             weight: 50,
@@ -139,7 +149,7 @@ async function main() {
             slug: "premium-matcha-organic",
             description: "JAS certified organic premium matcha.",
             price: 320000,
-            grade: MatchaGrade.PREMIUM,
+            grade: Grade.PREMIUM,
             flavor: "Clean, Vegetal, Mild",
             origin: "Kagoshima, Japan",
             weight: 50,
@@ -157,7 +167,7 @@ async function main() {
             description: "A carefully crafted blend of premium cultivars.",
             price: 240000,
             comparePrice: 280000,
-            grade: MatchaGrade.PREMIUM,
+            grade: Grade.PREMIUM,
             flavor: "Well-rounded, Grassy, Sweet",
             origin: "Shizuoka, Japan",
             weight: 50,
@@ -175,7 +185,7 @@ async function main() {
             description: "Exclusive selection by our tea masters.",
             price: 290000,
             comparePrice: 350000,
-            grade: MatchaGrade.PREMIUM,
+            grade: Grade.PREMIUM,
             flavor: "Deep, Aromatic, smooth",
             origin: "Nishio, Japan",
             weight: 40,
@@ -194,7 +204,7 @@ async function main() {
             slug: "culinary-bakers-choice",
             description: "Strong matcha flavor that stands out in baked goods.",
             price: 120000,
-            grade: MatchaGrade.CULINARY,
+            grade: Grade.CULINARY,
             flavor: "Strong, Bold",
             origin: "Japan",
             weight: 100,
@@ -212,7 +222,7 @@ async function main() {
             description: "Versatile culinary matcha ideal for savory applications.",
             price: 150000,
             comparePrice: 180000,
-            grade: MatchaGrade.CULINARY,
+            grade: Grade.CULINARY,
             flavor: "Robust, Vegetal, Versatile",
             origin: "Japan",
             weight: 100,
@@ -229,7 +239,7 @@ async function main() {
             slug: "culinary-value-pack",
             description: "Great value for bulk cooking needs.",
             price: 250000,
-            grade: MatchaGrade.CULINARY,
+            grade: Grade.CULINARY,
             flavor: "Standard, Bitter",
             origin: "Japan",
             weight: 500,
@@ -248,7 +258,7 @@ async function main() {
             slug: "latte-grade-matcha",
             description: "Designed to mix perfectly with milk for a smooth latte.",
             price: 180000,
-            grade: MatchaGrade.LATTE,
+            grade: Grade.LATTE,
             flavor: "Smooth, Sweet finish",
             origin: "Japan",
             weight: 100,
@@ -266,7 +276,7 @@ async function main() {
             description: "A cafe-style matcha blend designed for milk-based drinks.",
             price: 195000,
             comparePrice: 230000,
-            grade: MatchaGrade.LATTE,
+            grade: Grade.LATTE,
             flavor: "Mild, Balanced, Milk-friendly",
             origin: "Japan",
             weight: 80,
@@ -283,7 +293,7 @@ async function main() {
             slug: "iced-matcha-blend",
             description: "Optimized for cold drinks, this matcha dissolves easily.",
             price: 210000,
-            grade: MatchaGrade.LATTE,
+            grade: Grade.LATTE,
             flavor: "Refreshing, Light, Smooth",
             origin: "Japan",
             weight: 80,
@@ -300,7 +310,7 @@ async function main() {
             slug: "sweet-matcha-mix",
             description: "Pre-sweetened matcha mix for instant preparation.",
             price: 180000,
-            grade: MatchaGrade.LATTE,
+            grade: Grade.LATTE,
             flavor: "Sweet, Easy, Delicious",
             origin: "Japan",
             weight: 200,
