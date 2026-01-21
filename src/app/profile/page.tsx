@@ -1,22 +1,23 @@
 "use client";
 
-import { useEffect } from "react";
-import Link from "next/link";
-import Image from "next/image";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useSession, signOut } from "next-auth/react";
-import {
-    LogOut,
-    ShoppingBag,
-    Heart,
-    Settings,
-    Loader2,
-    ArrowRight
-} from "lucide-react";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
+import { Package, MapPin, CreditCard, Clock } from "lucide-react";
 
 export default function ProfilePage() {
     const router = useRouter();
     const { data: session, status } = useSession();
+
+    // States for data
+    const [orders, setOrders] = useState<any[]>([]);
+    const [stats, setStats] = useState({
+        totalOrders: 0,
+        pendingPayment: 0,
+        totalSpent: 0
+    });
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         if (status === "unauthenticated") {
@@ -24,11 +25,43 @@ export default function ProfilePage() {
         }
     }, [status, router]);
 
-    if (status === "loading") {
+    // Fetch Orders Data
+    useEffect(() => {
+        if (status === "authenticated") {
+            async function fetchData() {
+                try {
+                    const res = await fetch("/api/orders");
+                    if (res.ok) {
+                        const data = await res.json();
+                        setOrders(data);
+
+                        // Calculate Stats
+                        const pending = data.filter((o: any) => o.status === "PENDING").length;
+                        const spent = data
+                            .filter((o: any) => o.status !== "CANCELLED" && o.status !== "PENDING") // Assuming only processed/paid counts
+                            .reduce((acc: number, curr: any) => acc + Number(curr.total), 0);
+
+                        setStats({
+                            totalOrders: data.length,
+                            pendingPayment: pending,
+                            totalSpent: spent
+                        });
+                    }
+                } catch (error) {
+                    console.error("Failed to fetch dashboard data", error);
+                } finally {
+                    setLoading(false);
+                }
+            }
+            fetchData();
+        }
+    }, [status]);
+
+    if (status === "loading" || loading) {
         return (
-            <main className="min-h-screen bg-background flex items-center justify-center">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-            </main>
+            <div className="flex items-center justify-center min-h-[50vh]">
+                <div className="w-8 h-8 border-4 border-matcha border-t-transparent rounded-full animate-spin" />
+            </div>
         );
     }
 
@@ -36,109 +69,133 @@ export default function ProfilePage() {
         return null;
     }
 
-    const handleLogout = async () => {
-        await signOut({ callbackUrl: "/" });
-    };
-
     const user = session.user;
+    const recentOrders = orders.slice(0, 3); // Top 3 recent orders
 
     return (
-        <main className="min-h-screen bg-gradient-to-b from-primary/5 to-background">
-            <div className="container mx-auto px-4 py-12 max-w-2xl">
-
-                {/* Profile Card */}
-                <div className="bg-card rounded-3xl p-8 border border-border shadow-lg text-center mb-8">
-                    {/* Avatar */}
-                    <div className="relative inline-block mb-4">
-                        {user.image ? (
-                            <Image
-                                src={user.image}
-                                alt={user.name || "User"}
-                                width={100}
-                                height={100}
-                                className="rounded-full object-cover ring-4 ring-primary/20"
-                            />
-                        ) : (
-                            <div className="w-24 h-24 bg-gradient-to-br from-primary to-primary/70 text-white rounded-full flex items-center justify-center text-4xl font-bold ring-4 ring-primary/20">
-                                {user.name?.charAt(0).toUpperCase() || "U"}
-                            </div>
-                        )}
-                        <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-4 border-card" />
-                    </div>
-
-                    {/* Name & Email */}
-                    <h1 className="text-2xl font-serif font-bold text-foreground mb-1">
-                        {user.name || "Matcha Lover"}
+        <div className="space-y-6">
+            {/* Header / Welcome */}
+            <div className="bg-white rounded-2xl p-6 border border-border shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h1 className="text-2xl font-serif font-bold text-forest">
+                        Selamat Datang, {user.name?.split(" ")[0]}!
                     </h1>
-                    <p className="text-muted-foreground text-sm mb-6">
-                        {user.email}
+                    <p className="text-forest/60 text-sm mt-1">
+                        Member sejak Januari 2026 • <span className="text-matcha font-medium">Matcha Enthusiast</span>
                     </p>
+                </div>
+                <div className="flex items-center gap-3">
+                    <Link
+                        href="/products"
+                        className="px-5 py-2.5 bg-matcha text-white rounded-xl text-sm font-medium hover:bg-matcha-dark transition-colors shadow-matcha-sm"
+                    >
+                        Belanja Sekarang
+                    </Link>
+                </div>
+            </div>
 
-                    {/* Quick Actions */}
-                    <div className="flex justify-center gap-3">
-                        <Link
-                            href="/products"
-                            className="px-5 py-2.5 bg-primary text-primary-foreground rounded-full text-sm font-medium hover:bg-primary/90 transition-colors"
-                        >
-                            Belanja
+            {/* Stats Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="bg-white p-6 rounded-2xl border border-border shadow-sm">
+                    <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center mb-4">
+                        <Package className="w-5 h-5 text-blue-600" />
+                    </div>
+                    <p className="text-forest/60 text-sm">Total Pesanan</p>
+                    <p className="text-2xl font-bold text-forest mt-1">{stats.totalOrders}</p>
+                </div>
+                <div className="bg-white p-6 rounded-2xl border border-border shadow-sm">
+                    <div className="w-10 h-10 bg-orange-50 rounded-full flex items-center justify-center mb-4">
+                        <Clock className="w-5 h-5 text-orange-600" />
+                    </div>
+                    <p className="text-forest/60 text-sm">Menunggu Pembayaran</p>
+                    <p className="text-2xl font-bold text-forest mt-1">{stats.pendingPayment}</p>
+                </div>
+                <div className="bg-white p-6 rounded-2xl border border-border shadow-sm">
+                    <div className="w-10 h-10 bg-green-50 rounded-full flex items-center justify-center mb-4">
+                        <CreditCard className="w-5 h-5 text-green-600" />
+                    </div>
+                    <p className="text-forest/60 text-sm">Total Pengeluaran</p>
+                    <p className="text-2xl font-bold text-forest mt-1">
+                        Rp {stats.totalSpent.toLocaleString("id-ID")}
+                    </p>
+                </div>
+            </div>
+
+            {/* Recent Orders List */}
+            <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden">
+                <div className="p-6 border-b border-border flex items-center justify-between">
+                    <h2 className="font-serif font-bold text-lg text-forest">Pesanan Terbaru</h2>
+                    <Link href="/profile/orders" className="text-sm text-matcha font-medium hover:underline">
+                        Lihat Semua
+                    </Link>
+                </div>
+
+                {recentOrders.length > 0 ? (
+                    <div className="divide-y divide-border">
+                        {recentOrders.map((order) => (
+                            <div key={order.id} className="p-6 hover:bg-gray-50 transition-colors flex items-center justify-between gap-4">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-12 h-12 bg-cream rounded-lg flex items-center justify-center text-forest/40 border border-border">
+                                        <Package className="w-6 h-6" />
+                                    </div>
+                                    <div>
+                                        <p className="font-medium text-forest">{order.orderNumber}</p>
+                                        <p className="text-xs text-forest/60">
+                                            {new Date(order.createdAt).toLocaleDateString("id-ID", { day: 'numeric', month: 'long', year: 'numeric' })}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="text-right">
+                                    <span className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-bold border mb-1 
+                                        ${order.status === 'PENDING' ? 'bg-orange-100 text-orange-700 border-orange-200' :
+                                            order.status === 'PROCESSING' ? 'bg-blue-100 text-blue-700 border-blue-200' :
+                                                'bg-green-100 text-green-700 border-green-200'}`}>
+                                        {order.status}
+                                    </span>
+                                    <p className="font-bold text-sm text-forest">
+                                        Rp {Number(order.total).toLocaleString("id-ID")}
+                                    </p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <div className="p-12 text-center">
+                        <div className="w-16 h-16 bg-cream rounded-full flex items-center justify-center mx-auto mb-4">
+                            <Package className="w-8 h-8 text-forest/30" />
+                        </div>
+                        <h3 className="text-forest font-medium">Belum ada pesanan</h3>
+                        <p className="text-forest/60 text-sm mt-1 max-w-xs mx-auto">
+                            Anda belum melakukan pemesanan. Mulai belanja produk matcha favorit Anda sekarang!
+                        </p>
+                    </div>
+                )}
+            </div>
+
+            {/* Primary Address Preview (Static for now) */}
+            <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden">
+                <div className="p-6 border-b border-border flex items-center justify-between">
+                    <h2 className="font-serif font-bold text-lg text-forest">Alamat Utama</h2>
+                    <Link href="/profile/addresses" className="text-sm text-matcha font-medium hover:underline">
+                        Kelola Alamat
+                    </Link>
+                </div>
+                <div className="p-6 flex items-start gap-4">
+                    <div className="w-10 h-10 bg-cream rounded-full flex items-center justify-center flex-shrink-0">
+                        <MapPin className="w-5 h-5 text-forest/70" />
+                    </div>
+                    <div>
+                        <p className="font-medium text-forest">Belum ada alamat tersimpan</p>
+                        <p className="text-forest/60 text-sm mt-1">
+                            Silakan tambahkan alamat pengiriman untuk mempercepat proses checkout.
+                        </p>
+                        <Link href="/profile/addresses" className="inline-block mt-3 text-sm font-medium text-matcha border border-matcha/30 px-4 py-2 rounded-lg hover:bg-matcha/5 transition-colors">
+                            + Tambah Alamat Baru
                         </Link>
-                        <button
-                            onClick={handleLogout}
-                            className="px-5 py-2.5 bg-muted text-foreground rounded-full text-sm font-medium hover:bg-muted/80 transition-colors"
-                        >
-                            Keluar
-                        </button>
                     </div>
                 </div>
-
-                {/* Menu Grid */}
-                <div className="grid grid-cols-2 gap-4 mb-8">
-                    <Link
-                        href="/profile/orders"
-                        className="bg-card p-6 rounded-2xl border border-border hover:border-primary/50 hover:shadow-md transition-all group"
-                    >
-                        <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900/30 rounded-xl flex items-center justify-center mb-3">
-                            <ShoppingBag className="w-6 h-6 text-orange-600" />
-                        </div>
-                        <h3 className="font-semibold text-foreground mb-1">Pesanan</h3>
-                        <p className="text-xs text-muted-foreground">Lihat riwayat pesanan</p>
-                    </Link>
-
-                    <Link
-                        href="/profile/wishlist"
-                        className="bg-card p-6 rounded-2xl border border-border hover:border-primary/50 hover:shadow-md transition-all group"
-                    >
-                        <div className="w-12 h-12 bg-pink-100 dark:bg-pink-900/30 rounded-xl flex items-center justify-center mb-3">
-                            <Heart className="w-6 h-6 text-pink-600" />
-                        </div>
-                        <h3 className="font-semibold text-foreground mb-1">Wishlist</h3>
-                        <p className="text-xs text-muted-foreground">Produk favorit Anda</p>
-                    </Link>
-
-                    <Link
-                        href="/profile/settings"
-                        className="bg-card p-6 rounded-2xl border border-border hover:border-primary/50 hover:shadow-md transition-all group col-span-2"
-                    >
-                        <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 bg-gray-100 dark:bg-gray-900/30 rounded-xl flex items-center justify-center">
-                                <Settings className="w-6 h-6 text-gray-600" />
-                            </div>
-                            <div className="flex-1">
-                                <h3 className="font-semibold text-foreground mb-1">Pengaturan</h3>
-                                <p className="text-xs text-muted-foreground">Kelola akun & preferensi</p>
-                            </div>
-                            <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
-                        </div>
-                    </Link>
-                </div>
-
-                {/* Promo Banner */}
-                <div className="bg-gradient-to-r from-primary to-primary/80 rounded-2xl p-6 text-white text-center">
-                    <p className="text-sm opacity-90 mb-1">🍃 Member Exclusive</p>
-                    <p className="font-semibold">Dapatkan diskon 10% untuk pembelian pertama!</p>
-                </div>
-
             </div>
-        </main>
+        </div>
     );
 }
+
