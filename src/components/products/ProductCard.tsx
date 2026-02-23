@@ -132,6 +132,14 @@ export default function ProductCard({ product }: ProductCardProps) {
                 >
                     <Heart className={cn("w-4 h-4", isWishlisted && "fill-current")} />
                 </button>
+                {/* Main Product Image */}
+                <Image
+                    src={product.images[0] || "/images/products/placeholder.jpg"}
+                    alt={product.name}
+                    fill
+                    className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                />
 
                 {/* Overlay on Hover */}
                 <div className="absolute inset-0 bg-forest/0 group-hover:bg-forest/10 transition-colors duration-300" />
@@ -152,49 +160,49 @@ export default function ProductCard({ product }: ProductCardProps) {
 
             {/* Content */}
             <div className="p-4">
-                {/* Category */}
-                {product.category && (
-                    <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">
-                        {product.category.name}
-                    </p>
-                )}
-
-                {/* Name */}
-                <Link href={`/products/${product.slug}`}>
-                    <h3 className="font-medium text-foreground line-clamp-2 mb-2 group-hover:text-primary transition-colors">
-                        {product.name}
-                    </h3>
-                </Link>
-
-                {/* Product Info (Minimalist) */}
-                <div className="flex items-start justify-between">
-                    <div>
-                        {/* Rating */}
-                        {product.reviewCount !== undefined && product.reviewCount > 0 && (
-                            <div className="flex items-center gap-1 mb-1">
-                                <Star className="w-3 h-3 text-amber-400 fill-amber-400" />
-                                <span className="text-xs font-medium text-amber-600">
-                                    {product.averageRating?.toFixed(1)}
-                                </span>
-                                <span className="text-xs text-muted-foreground">
-                                    ({product.reviewCount})
-                                </span>
-                            </div>
+                {/* Info Header */}
+                <div className="flex items-start justify-between mb-2">
+                    <div className="flex-1 min-w-0">
+                        {/* Category */}
+                        {product.category && (
+                            <p className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1 font-semibold truncate">
+                                {product.category.name}
+                            </p>
                         )}
 
                         {/* Name */}
                         <Link href={`/products/${product.slug}`}>
-                            <h3 className="font-medium text-foreground line-clamp-1 group-hover:text-primary transition-colors">
+                            <h3 className="font-medium text-foreground line-clamp-2 group-hover:text-primary transition-colors leading-tight">
                                 {product.name}
                             </h3>
                         </Link>
-
-                        {/* Category */}
-                        <p className="text-xs text-muted-foreground mt-0.5">
-                            {product.category?.name}
-                        </p>
                     </div>
                 </div>
+
+                {/* Meta Info (Rating) */}
+                {product.reviewCount !== undefined && product.reviewCount > 0 && (
+                    <div className="flex items-center gap-1.5 mt-2 pt-2 border-t border-border/50">
+                        <div className="flex items-center">
+                            {[...Array(5)].map((_, i) => (
+                                <Star
+                                    key={i}
+                                    className={cn(
+                                        "w-2.5 h-2.5",
+                                        i < Math.floor(product.averageRating || 0)
+                                            ? "text-amber-400 fill-amber-400"
+                                            : "text-gray-300"
+                                    )}
+                                />
+                            ))}
+                        </div>
+                        <span className="text-[10px] font-medium text-amber-600">
+                            {product.averageRating?.toFixed(1)}
+                        </span>
+                        <span className="text-[10px] text-muted-foreground">
+                            ({product.reviewCount})
+                        </span>
+                    </div>
+                )}
             </div>
 
             {/* Out of Stock Overlay */}
