@@ -58,7 +58,7 @@ export async function POST(req: Request) {
                 shippingCost: shippingCost || 0,
                 tax: tax || 0,
                 items: {
-                    create: items.map((item: any) => ({
+                    create: items.map((item: { productId?: string; id?: string; quantity: number; price: number | string }) => ({
                         productId: item.productId || item.id, // Handle potential id mismatch
                         quantity: item.quantity,
                         price: item.price

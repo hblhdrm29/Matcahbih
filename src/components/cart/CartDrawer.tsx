@@ -16,6 +16,7 @@ export default function CartDrawer() {
     const [isClient, setIsClient] = useState(false);
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setIsClient(true);
     }, []);
 
@@ -29,6 +30,7 @@ export default function CartDrawer() {
             document.body.style.overflow = "hidden";
         } else {
             document.body.style.overflow = "";
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setShowLoginPrompt(false); // Reset prompt when closed
         }
         return () => {

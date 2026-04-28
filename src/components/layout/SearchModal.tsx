@@ -215,7 +215,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                                 onClick={() => handleSearchSubmit()}
                                 className="w-full mt-4 p-4 text-center text-sm text-forest font-medium hover:text-matcha hover:bg-forest/5 rounded-xl transition-all flex items-center justify-center gap-2 group"
                             >
-                                Lihat semua hasil untuk "<span className="font-bold">{query}</span>"
+                                Lihat semua hasil untuk &quot;<span className="font-bold">{query}</span>&quot;
                                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                             </button>
                         </div>
@@ -223,7 +223,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                         <div className="py-16 text-center text-forest/60">
                             <Search className="w-12 h-12 mx-auto mb-4 opacity-20" />
                             <p className="font-serif text-lg text-forest">Tidak ada hasil ditemukan</p>
-                            <p className="text-sm mt-1">Coba kata kunci lain seperti "Ceremonial" atau "Set"</p>
+                            <p className="text-sm mt-1">Coba kata kunci lain seperti &quot;Ceremonial&quot; atau &quot;Set&quot;</p>
                         </div>
                     )}
                 </div>

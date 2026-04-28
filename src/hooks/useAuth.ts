@@ -9,6 +9,6 @@ export const useAuth = () => {
         user,
         loading,
         isAuthenticated: !!user,
-        role: (user as any)?.role,
+        role: (user as { role?: string })?.role,
     };
 };

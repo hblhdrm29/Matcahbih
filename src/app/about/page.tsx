@@ -217,7 +217,7 @@ export default function AboutPage() {
             <section className="py-16 md:py-24">
                 <div className="container mx-auto px-4">
                     <div className="max-w-3xl mx-auto bg-card rounded-3xl p-8 md:p-12 border border-border text-center relative overflow-hidden">
-                        <div className="absolute top-4 left-4 text-6xl text-primary/10">"</div>
+                        <div className="absolute top-4 left-4 text-6xl text-primary/10">&quot;</div>
                         <div className="relative z-10">
                             <p className="text-xl md:text-2xl text-foreground font-serif italic mb-6">
                                 Matcha bukan sekadar minuman, tapi filosofi hidup. Dalam setiap

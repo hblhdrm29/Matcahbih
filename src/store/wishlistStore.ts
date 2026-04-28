@@ -33,7 +33,9 @@ export const useWishlistStore = create<WishlistStore>((set, get) => ({
             if (res.ok) {
                 const data = await res.json();
                 // Extract product IDs
-                const ids = data.map((item: any) => item.product.id || item.productId);
+                const ids = data.map((item: { product: { id: string }, productId?: string }) => 
+                    item.product?.id || item.productId
+                );
                 set({ items: ids });
             }
         } catch (error) {

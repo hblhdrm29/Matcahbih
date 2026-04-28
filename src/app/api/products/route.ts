@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { ProductQueryParams, PaginatedResponse, Product } from "@/types";
+import { Prisma } from "@prisma/client";
 
 // GET /api/products - Get all products with filtering and pagination
 export async function GET(request: NextRequest) {
@@ -25,7 +26,7 @@ export async function GET(request: NextRequest) {
         };
 
         // Build where clause
-        const where: any = {
+        const where: Prisma.ProductWhereInput = {
             isActive: true,
         };
 
@@ -40,10 +41,10 @@ export async function GET(request: NextRequest) {
         if (params.minPrice !== undefined || params.maxPrice !== undefined) {
             where.price = {};
             if (params.minPrice !== undefined) {
-                where.price.gte = params.minPrice;
+                (where.price as Prisma.DecimalFilter).gte = params.minPrice;
             }
             if (params.maxPrice !== undefined) {
-                where.price.lte = params.maxPrice;
+                (where.price as Prisma.DecimalFilter).lte = params.maxPrice;
             }
         }
 
@@ -59,7 +60,7 @@ export async function GET(request: NextRequest) {
         }
 
         // Build orderBy clause
-        let orderBy: any = { createdAt: "desc" };
+        let orderBy: Prisma.ProductOrderByWithRelationInput = { createdAt: "desc" };
         switch (params.sort) {
             case "price-asc":
                 orderBy = { price: "asc" };

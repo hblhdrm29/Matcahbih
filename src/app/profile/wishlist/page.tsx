@@ -6,8 +6,13 @@ import { Heart, ArrowRight } from "lucide-react";
 import ProductCard from "@/components/products/ProductCard";
 import { Product } from "@/types";
 
+interface WishlistItem {
+    id: string;
+    product: Product;
+}
+
 export default function WishlistPage() {
-    const [wishlistItems, setWishlistItems] = useState<any[]>([]);
+    const [wishlistItems, setWishlistItems] = useState<WishlistItem[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {

@@ -6,12 +6,20 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { Package, MapPin, CreditCard, Clock } from "lucide-react";
 
+interface OrderSummary {
+    id: string;
+    orderNumber: string;
+    status: string;
+    total: number | string;
+    createdAt: string;
+}
+
 export default function ProfilePage() {
     const router = useRouter();
     const { data: session, status } = useSession();
 
     // States for data
-    const [orders, setOrders] = useState<any[]>([]);
+    const [orders, setOrders] = useState<OrderSummary[]>([]);
     const [stats, setStats] = useState({
         totalOrders: 0,
         pendingPayment: 0,
@@ -36,10 +44,10 @@ export default function ProfilePage() {
                         setOrders(data);
 
                         // Calculate Stats
-                        const pending = data.filter((o: any) => o.status === "PENDING").length;
+                        const pending = data.filter((o: OrderSummary) => o.status === "PENDING").length;
                         const spent = data
-                            .filter((o: any) => o.status !== "CANCELLED" && o.status !== "PENDING") // Assuming only processed/paid counts
-                            .reduce((acc: number, curr: any) => acc + Number(curr.total), 0);
+                            .filter((o: OrderSummary) => o.status !== "CANCELLED" && o.status !== "PENDING") // Assuming only processed/paid counts
+                            .reduce((acc: number, curr: OrderSummary) => acc + Number(curr.total), 0);
 
                         setStats({
                             totalOrders: data.length,

@@ -50,9 +50,9 @@ export default function OrderDetailPage() {
                 }
                 const data = await res.json();
                 setOrder(data);
-            } catch (err: any) {
+            } catch (err: unknown) {
                 console.error(err);
-                setError(err.message);
+                setError(err instanceof Error ? err.message : "Terjadi kesalahan");
             } finally {
                 setLoading(false);
             }

@@ -66,7 +66,117 @@ export default function ProductFilters({
 
     const hasActiveFilters = selectedCategory || selectedGrade || minPrice !== null || maxPrice !== null;
 
-    const FilterContent = () => (
+
+
+    return (
+        <>
+            {/* Desktop Filters */}
+            <aside className="hidden lg:block w-64 shrink-0">
+                <div className="sticky top-24 bg-card rounded-2xl p-6 shadow-sm">
+                    <h2 className="text-lg font-semibold text-foreground mb-6 flex items-center gap-2">
+                        <Filter className="w-5 h-5" />
+                        Filters
+                    </h2>
+                    <FilterContent
+                        hasActiveFilters={hasActiveFilters}
+                        onClearFilters={onClearFilters}
+                        toggleSection={toggleSection}
+                        expandedSections={expandedSections}
+                        onCategoryChange={onCategoryChange}
+                        selectedCategory={selectedCategory}
+                        categories={categories}
+                        onGradeChange={onGradeChange}
+                        selectedGrade={selectedGrade}
+                        onPriceChange={onPriceChange}
+                        minPrice={minPrice}
+                        maxPrice={maxPrice}
+                    />
+                </div>
+            </aside>
+
+            {/* Mobile Filter Button */}
+            <button
+                onClick={() => setMobileOpen(true)}
+                className="lg:hidden fixed bottom-6 right-6 z-40 flex items-center gap-2 px-5 py-3 bg-primary text-primary-foreground rounded-full shadow-matcha-lg hover:scale-105 transition-transform"
+            >
+                <Filter className="w-5 h-5" />
+                Filters
+                {hasActiveFilters && (
+                    <span className="w-2 h-2 bg-red-500 rounded-full" />
+                )}
+            </button>
+
+            {/* Mobile Filter Drawer */}
+            {mobileOpen && (
+                <div className="lg:hidden fixed inset-0 z-50">
+                    <div
+                        className="absolute inset-0 bg-black/50"
+                        onClick={() => setMobileOpen(false)}
+                    />
+                    <div className="absolute right-0 top-0 bottom-0 w-80 max-w-full bg-background p-6 overflow-y-auto animate-slide-up">
+                        <div className="flex items-center justify-between mb-6">
+                            <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
+                                <Filter className="w-5 h-5" />
+                                Filters
+                            </h2>
+                            <button
+                                onClick={() => setMobileOpen(false)}
+                                className="p-2 hover:bg-muted rounded-lg transition-colors"
+                            >
+                                <X className="w-5 h-5" />
+                            </button>
+                        </div>
+                        <FilterContent
+                        hasActiveFilters={hasActiveFilters}
+                        onClearFilters={onClearFilters}
+                        toggleSection={toggleSection}
+                        expandedSections={expandedSections}
+                        onCategoryChange={onCategoryChange}
+                        selectedCategory={selectedCategory}
+                        categories={categories}
+                        onGradeChange={onGradeChange}
+                        selectedGrade={selectedGrade}
+                        onPriceChange={onPriceChange}
+                        minPrice={minPrice}
+                        maxPrice={maxPrice}
+                    />
+                    </div>
+                </div>
+            )}
+        </>
+    );
+}
+
+interface FilterContentProps {
+    hasActiveFilters: string | MatchaGrade | number | null;
+    onClearFilters: () => void;
+    toggleSection: (section: "category" | "grade" | "price") => void;
+    expandedSections: { category: boolean; grade: boolean; price: boolean };
+    onCategoryChange: (category: string | null) => void;
+    selectedCategory: string | null;
+    categories: Category[];
+    onGradeChange: (grade: MatchaGrade | null) => void;
+    selectedGrade: MatchaGrade | null;
+    onPriceChange: (min: number | null, max: number | null) => void;
+    minPrice: number | null;
+    maxPrice: number | null;
+}
+
+function FilterContent({
+    hasActiveFilters,
+    onClearFilters,
+    toggleSection,
+    expandedSections,
+    onCategoryChange,
+    selectedCategory,
+    categories,
+    onGradeChange,
+    selectedGrade,
+    onPriceChange,
+    minPrice,
+    maxPrice,
+}: FilterContentProps) {
+    return (
         <div className="space-y-6">
             {/* Clear Filters */}
             {hasActiveFilters && (
@@ -204,57 +314,5 @@ export default function ProductFilters({
                 )}
             </div>
         </div>
-    );
-
-    return (
-        <>
-            {/* Desktop Filters */}
-            <aside className="hidden lg:block w-64 shrink-0">
-                <div className="sticky top-24 bg-card rounded-2xl p-6 shadow-sm">
-                    <h2 className="text-lg font-semibold text-foreground mb-6 flex items-center gap-2">
-                        <Filter className="w-5 h-5" />
-                        Filters
-                    </h2>
-                    <FilterContent />
-                </div>
-            </aside>
-
-            {/* Mobile Filter Button */}
-            <button
-                onClick={() => setMobileOpen(true)}
-                className="lg:hidden fixed bottom-6 right-6 z-40 flex items-center gap-2 px-5 py-3 bg-primary text-primary-foreground rounded-full shadow-matcha-lg hover:scale-105 transition-transform"
-            >
-                <Filter className="w-5 h-5" />
-                Filters
-                {hasActiveFilters && (
-                    <span className="w-2 h-2 bg-red-500 rounded-full" />
-                )}
-            </button>
-
-            {/* Mobile Filter Drawer */}
-            {mobileOpen && (
-                <div className="lg:hidden fixed inset-0 z-50">
-                    <div
-                        className="absolute inset-0 bg-black/50"
-                        onClick={() => setMobileOpen(false)}
-                    />
-                    <div className="absolute right-0 top-0 bottom-0 w-80 max-w-full bg-background p-6 overflow-y-auto animate-slide-up">
-                        <div className="flex items-center justify-between mb-6">
-                            <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
-                                <Filter className="w-5 h-5" />
-                                Filters
-                            </h2>
-                            <button
-                                onClick={() => setMobileOpen(false)}
-                                className="p-2 hover:bg-muted rounded-lg transition-colors"
-                            >
-                                <X className="w-5 h-5" />
-                            </button>
-                        </div>
-                        <FilterContent />
-                    </div>
-                </div>
-            )}
-        </>
     );
 }

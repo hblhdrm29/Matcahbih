@@ -1,4 +1,5 @@
 import { Leaf, Truck, Shield, Award, Clock, Heart } from "lucide-react";
+import Link from "next/link";
 
 const features = [
     {
@@ -95,12 +96,12 @@ export default function WhyChooseUs() {
                                 Join thousands of matcha lovers and discover your new favorite.
                             </p>
                         </div>
-                        <a
+                        <Link
                             href="/products"
                             className="flex-shrink-0 px-8 py-4 bg-matcha hover:bg-matcha-light text-white font-medium rounded-full transition-all duration-300 hover-lift shadow-matcha"
                         >
                             Shop Now
-                        </a>
+                        </Link>
                     </div>
                 </div>
             </div>
