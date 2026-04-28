@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Search, X, Loader2, ArrowRight } from "lucide-react";
-import { cn } from "@/lib/utils";
 import Link from "next/link";
 import Image from "next/image";
 

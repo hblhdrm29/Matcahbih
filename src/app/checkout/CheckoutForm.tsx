@@ -12,9 +12,7 @@ import {
     CheckCircle,
     Loader2,
     MapPin,
-    Phone,
-    User,
-    Mail
+    User
 } from "lucide-react";
 import { useCartStore } from "@/store/cartStore";
 

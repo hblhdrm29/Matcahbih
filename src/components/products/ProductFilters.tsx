@@ -64,7 +64,7 @@ export default function ProductFilters({
         }));
     };
 
-    const hasActiveFilters = selectedCategory || selectedGrade || minPrice !== null || maxPrice !== null;
+    const hasActiveFilters = !!selectedCategory || !!selectedGrade || minPrice !== null || maxPrice !== null;
 
 
 
@@ -148,7 +148,7 @@ export default function ProductFilters({
 }
 
 interface FilterContentProps {
-    hasActiveFilters: string | MatchaGrade | number | null;
+    hasActiveFilters: boolean;
     onClearFilters: () => void;
     toggleSection: (section: "category" | "grade" | "price") => void;
     expandedSections: { category: boolean; grade: boolean; price: boolean };

@@ -1,9 +1,4 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-
-type WishlistItem = {
-    id: string; // Product id
-};
 
 type WishlistStore = {
     items: string[]; // List of product IDs

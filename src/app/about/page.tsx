@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Leaf, Heart, Award, Users, MapPin, Sparkles, ArrowRight } from "lucide-react";
+import { Leaf, Heart, Award, Users, MapPin, ArrowRight } from "lucide-react";
 
 export const metadata = {
     title: "Tentang Kami",

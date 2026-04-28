@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { ProductQueryParams, PaginatedResponse, Product } from "@/types";
+import { ProductQueryParams, PaginatedResponse } from "@/types";
 import { Prisma } from "@prisma/client";
 
 // GET /api/products - Get all products with filtering and pagination

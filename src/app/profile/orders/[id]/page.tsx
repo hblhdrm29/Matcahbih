@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import {
     ArrowLeft, Package, Clock, Truck, CheckCircle, XCircle,
-    AlertCircle, MapPin, CreditCard, ChevronRight, Download
+    AlertCircle, MapPin, ChevronRight, Download
 } from "lucide-react";
 
 type OrderItem = {
@@ -33,7 +34,6 @@ type Order = {
 
 export default function OrderDetailPage() {
     const params = useParams();
-    const router = useRouter();
     const id = params?.id as string;
 
     const [order, setOrder] = useState<Order | null>(null);
@@ -156,7 +156,14 @@ export default function OrderDetailPage() {
                                 <div key={item.id} className="p-6 flex gap-4">
                                     <div className="w-20 h-20 bg-cream rounded-lg overflow-hidden flex-shrink-0 border border-border">
                                         {item.product.image ? (
-                                            <img src={item.product.image} alt={item.product.name} className="w-full h-full object-cover" />
+                                            <div className="relative w-full h-full">
+                                                <Image 
+                                                    src={item.product.image} 
+                                                    alt={item.product.name} 
+                                                    fill
+                                                    className="object-cover" 
+                                                />
+                                            </div>
                                         ) : (
                                             <div className="w-full h-full flex items-center justify-center bg-matcha/10">
                                                 <Package className="w-8 h-8 text-matcha/40" />
